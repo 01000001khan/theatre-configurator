@@ -4,10 +4,10 @@
         <style>
             .render {
                 position: absolute;
-                width: 100px;
-                height: 100px;
-                left: 200px;
-                top: 200px;
+                width: 10rem;
+                height: 10rem;
+                left: 10rem;
+                top: 15rem;
                 display: block;
                 transform-origin: top left;
                 user-select: none;
@@ -19,23 +19,23 @@
             }
 
             #x_wall {
-                width: 100px;
-                height: 100px;
+                width: 10rem;
+                height: 10rem;
             }
             #y_wall {
-                width: 100px;
-                height: 100px;
+                width: 10rem;
+                height: 10rem;
             }
             #z_wall {
-                width: 100px;
-                height: 100px;
+                width: 10rem;
+                height: 10rem;
             }
         </style>
     </head>
     <body>
-        <input type="range" id="x_dim" min="50" max="200" oninput="x_dim(value)"/>
-        <input type="range" id="y_dim" min="50" max="200" oninput="y_dim(value)"/>
-        <input type="range" id="y_dim" min="50" max="200" oninput="z_dim(value)"/>
+        <input type="range" id="x_dim" min="5" max="10" value="10" oninput="x_dim(value)"/>
+        <input type="range" id="y_dim" min="5" max="10" value="10" oninput="y_dim(value)"/>
+        <input type="range" id="y_dim" min="5" max="10" value="10" oninput="z_dim(value)"/>
         <div>
             <div style="position: absolute">
                 <img src="./0002.png" class="render" id="x_wall" style="transform: matrix(-0.8660254038, .5, 0, -1, 0, 0)" />
@@ -47,29 +47,29 @@
                 <img src="./0004.png" class="render" id="z_wall" style="transform: matrix(0.8660254038, .5, -0.8660254038, .5, 0, 0)" />
             </div>
             <div style="position: absolute">
-                <img src="./0005.png" class="render" id="speaker" style="left: 200px; top: 179px;" />
+                <img src="./0005.png" class="render" id="speaker" style="left: 7rem; top: 11.5rem;" />
             </div>
         </div>
         <br>
 
-        <img src="./0001.png" style="position: relative; width: 300px; top: 400px" />
+        <img src="./0001.png" style="position: relative; width: 30rem; top: 30rem" />
     </body>
     
     <script>
         
         function x_dim(x){
-            document.querySelector("#y_wall").style.height = x + "px";
-            document.querySelector("#z_wall").style.width = x + "px";
+            document.querySelector("#y_wall").style.height = x + "rem";
+            document.querySelector("#z_wall").style.width = x + "rem";
         }
 
         function y_dim(x){
-            document.querySelector("#x_wall").style.width = x + "px";
-            document.querySelector("#z_wall").style.height = x + "px";
+            document.querySelector("#x_wall").style.width = x + "rem";
+            document.querySelector("#z_wall").style.height = x + "rem";
         }
 
         function z_dim(x){
-            document.querySelector("#y_wall").style.width = x + "px";
-            document.querySelector("#x_wall").style.height = x + "px";
+            document.querySelector("#y_wall").style.width = x + "rem";
+            document.querySelector("#x_wall").style.height = x + "rem";
         }
 
     </script>
