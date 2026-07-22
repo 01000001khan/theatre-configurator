@@ -2,15 +2,44 @@
 <html>
     <head>
         <style>
-            img {
+            .render {
                 position: absolute;
+                width: 100px;
+                height: 100px;
+                left: 100px;
+                top: 100px;
+                display: block;
+            }
+            
+            body {
+                background-color: #474240;
+                color: #eee;
+            }
+
+            #x_wall {
+                width: 100px;
+            }
+            #y_wall {
+                width: 100px;
+            }
+            #z_wall {
+                width: 100px;
             }
         </style>
     </head>
     <body>
         <p> hi </p>
-        <img src="./0002.png" style="transform: matrix(0.8660254038, .5, 0, 1, 0, -1)" />
-        <img src="./0003.png" style="transform: matrix(0.8660254038, -.5, 0, 1, -0.8660254038, -.5)" />
-        <img src="./0004.png" style="transform: matrix(0.8660254038, -.5, 0.8660254038, .5, -0.8660254038, .5)" />
+        <br>
+        <br>
+        <div style="position: absolute">
+            <img src="./0002.png" class="render" id="x_wall" style="transform: matrix(0.8660254038, -.5, 0, 1, -86, 0)" />
+        </div>
+        <div style="position: absolute">
+            <img src="./0003.png" class="render" id="y_wall" style="transform: matrix(0.8660254038, .5, 0, 1, 0, 0)" />
+        </div>
+        <div style="position: absolute">
+            <img src="./0004.png" class="render" id="z_wall" style="transform: matrix(0.8660254038, .5, -0.8660254038, .5, -43, 75)" />
+        </div>
+        <img src="./0001.png" style="width: 300px; top: 350px" />
     </body>
 </html>
