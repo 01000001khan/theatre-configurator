@@ -33,9 +33,9 @@
         </style>
     </head>
     <body>
-        <input type="range" id="x_dim" min="5" max="10" value="10" oninput="x_dim(value)"/>
-        <input type="range" id="y_dim" min="5" max="10" value="10" oninput="y_dim(value)"/>
-        <input type="range" id="y_dim" min="5" max="10" value="10" oninput="z_dim(value)"/>
+        <input type="range" id="x_dim" min="5" max="10" value="10" step=0.01 oninput="x_dim(value)"/>
+        <input type="range" id="y_dim" min="5" max="10" value="10" step=0.01 oninput="y_dim(value)"/>
+        <input type="range" id="y_dim" min="5" max="10" value="10" step=0.01 oninput="z_dim(value)"/>
         <div>
             <div style="position: absolute">
                 <img src="./0002.png" class="render" id="x_wall" style="transform: matrix(-0.8660254038, .5, 0, -1, 0, 0)" />
