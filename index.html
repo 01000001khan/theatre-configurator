@@ -6,11 +6,12 @@
                 position: absolute;
                 width: 10rem;
                 height: 10rem;
-                left: 10rem;
+                left: 15rem;
                 top: 15rem;
                 display: block;
                 transform-origin: top left;
                 user-select: none;
+                aspect-ratio: 1;
             }
             
             body {
@@ -21,56 +22,162 @@
             #x_wall {
                 width: 10rem;
                 height: 10rem;
+                transform: matrix(-0.8660254038, .5, 0, -1, 0, 0) /* note basis vector is not normalized by css */
             }
             #y_wall {
                 width: 10rem;
                 height: 10rem;
+                transform: matrix(0, -1, 0.8660254038, .5, 0, 0)
             }
             #z_wall {
                 width: 10rem;
                 height: 10rem;
+                transform: matrix(0.8660254038, .5, -0.8660254038, .5, 0, 0);
             }
+
+            #calibration_cube {
+                transform-origin: center;
+            }
+
         </style>
     </head>
     <body>
-        <input type="range" id="x_dim" min="5" max="10" value="10" step=0.01 oninput="x_dim(value)"/>
-        <input type="range" id="y_dim" min="5" max="10" value="10" step=0.01 oninput="y_dim(value)"/>
-        <input type="range" id="y_dim" min="5" max="10" value="10" step=0.01 oninput="z_dim(value)"/>
-        <div>
-            <div style="position: absolute">
-                <img src="./0002.png" class="render" id="x_wall" style="transform: matrix(-0.8660254038, .5, 0, -1, 0, 0)" />
-            </div>
-            <div style="position: absolute">
-                <img src="./0003.png" class="render" id="y_wall" style="transform: matrix(0, -1, 0.8660254038, .5, 0, 0)" />
-            </div>
-            <div style="position: absolute">
-                <img src="./0004.png" class="render" id="z_wall" style="transform: matrix(0.8660254038, .5, -0.8660254038, .5, 0, 0)" />
-            </div>
-            <div style="position: absolute">
-                <img src="./0005.png" class="render" id="speaker" style="left: 7rem; top: 11.5rem;" />
-            </div>
+        <span>x:  </span><input type="range" id="x_dim" min="0" max="1" value="1" step=0.01 oninput="x_dim(value)"/><br>
+        <span>y:  </span><input type="range" id="y_dim" min="0" max="1" value="1" step=0.01 oninput="y_dim(value)"/><br>
+        <span>z:  </span><input type="range" id="y_dim" min="0" max="1" value="1" step=0.01 oninput="z_dim(value)"/><br>
+        <div style="position: absolute">
+            <img src="./0002.png" class="render" id="x_wall" />
+            <img src="./0003.png" class="render" id="y_wall" />
+            <img src="./0004.png" class="render" id="z_wall" />
+            <img src="./0005.png" class="render" id="speaker" />
+            <img src="./0006.png" class="render" id="tv" />
+            <img src="./0005.png" class="render" id="speaker2" />
+            <img src="./0008.png" class="render" id="chair" />
+
+            <!-- <img src="./0007.png" class="render" id="calibration_cube" /> -->
+            <!-- ^ this is a 1 metre unit cube to calibrate size -->
         </div>
         <br>
-
-        <img src="./0001.png" style="position: relative; width: 30rem; top: 30rem" />
     </body>
     
     <script>
+        // normalized basis vector components. view is exact from the corner of the cube, aka
+        // normalize(vec3(1)) or 45 degrees around the z axis and elevation acos(1/sqrt(3)) so
+        // the basis vectors can be normalized. different views will require differing lengths
+        var x_x = 0.8660254038;
+        var x_y = 0.5;
+
+        var y_x = -0.8660254038;
+        var y_y = 0.5;
+
+        var z_x = 0.;
+        var z_y = 1.;
+
+        //coordinate system is using rem units
+        var centre_x = 15;
+        var centre_y = 15;
+
+        var size_x = 10;
+        var size_y = 10;
+        // dimensions of non matrix transformed images
+        // matches .render.width and height
+
+        var range_scale = 5;
+        var range_offset = 5;
         
-        function x_dim(x){
-            document.querySelector("#y_wall").style.height = x + "rem";
-            document.querySelector("#z_wall").style.width = x + "rem";
+        var default_coords = {
+            "#speaker" : {
+                "x" : -5,
+                "y" : -5
+            },
+            "#speaker2" : {
+                "x" : -5 + x_x*6.,
+                "y" : -5 + x_y*6.
+            },
+            "#tv" : {
+                "x" : -2.5,
+                "y" : -6
+            },
+            '#calibration_cube' : {
+                "x" : -size_x/2,
+                "y" : -size_y/2
+            },
+            '#chair' : {
+                "x" : -size_x/2,
+                "y" : -2
+            }
         }
 
+        var coords = {};
+
+        var speakers = {};
+        Object.entries(default_coords).forEach(e => {
+            var o = document.querySelector(e[0]);
+            if (o != null){
+                speakers[e[0]] = o;
+            } else {
+                delete default_coords[e[0]]; // this lets you comment out objects in the html 
+                                            // even if they exist in the js, without errors
+            }
+        })
+        
+        console.log(default_coords);
+        Object.entries(default_coords).forEach(e => {
+            var q = e[0];
+            speakers[q].style.transform = "translate(" + e[1]['x'] + "rem, " + e[1]['y'] + "rem)";
+            console.log(q);
+            
+            coords[q] = {
+                "x" : 0,
+                "y" : 0,
+                "z" : 0
+            }
+        });
+        
+        function x_dim(x){ 
+            var dim = range_offset + x*range_scale;
+            document.querySelector("#y_wall").style.height = dim + "rem";
+            document.querySelector("#z_wall").style.width = dim + "rem";
+            
+            coords['#speaker2']['x'] = (x-1)*range_scale;
+            coords['#tv']['x'] = (x-1)*range_scale/2;
+            coords['#chair']['x'] = (x-1)*range_scale/2;
+            pos_update('#speaker2');
+            pos_update('#tv');
+            pos_update('#chair');
+        }
+            
         function y_dim(x){
-            document.querySelector("#x_wall").style.width = x + "rem";
-            document.querySelector("#z_wall").style.height = x + "rem";
-        }
+            var dim = range_offset + x*range_scale;
+            document.querySelector("#x_wall").style.width = dim + "rem";
+            document.querySelector("#z_wall").style.height = dim + "rem";
 
-        function z_dim(x){
-            document.querySelector("#y_wall").style.width = x + "rem";
-            document.querySelector("#x_wall").style.height = x + "rem";
+            coords['#chair']['y'] = (x-1)*range_scale/2;
+            pos_update('#chair');
         }
+        
+        function z_dim(x){
+            var dim = range_offset + x*range_scale;
+            document.querySelector("#y_wall").style.width = dim + "rem";
+            document.querySelector("#x_wall").style.height = dim + "rem";
+
+            coords['#tv']['z'] = -(x-1)*range_scale/2;
+            pos_update('#tv');
+        }
+        
+        function pos_update(q){
+            s = default_coords[q];
+            c = coords[q];
+            speakers[q].style.transform = "translate("
+                + (s['x'] + c['x']*x_x + c['y']*y_x + c['z']*z_x) + "rem, " 
+                + (s['y'] + c['x']*x_y + c['y']*y_y + c['z']*z_y) + "rem) " 
+                // projection of 3d coordinates into screen space using the basis vectors
+        }
+        
+        // document.querySelector("#calibration_cube").style.transform="translate(-5rem, -5rem) scale(4.9)";
+        // calibration
+        // max room size with 10 rem images is 4.9 metres
+        // max room size in screen space is 10 rem 
 
     </script>
 </html>
