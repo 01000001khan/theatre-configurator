@@ -53,6 +53,7 @@
             <img src="./0006.png" class="render" id="tv" />
             <img src="./0005.png" class="render" id="speaker2" />
             <img src="./0008.png" class="render" id="chair" />
+            <img src="./0009.png" class="render" id="glass" />
 
             <!-- <img src="./0007.png" class="render" id="calibration_cube" /> -->
             <!-- ^ this is a 1 metre unit cube to calibrate size -->
@@ -105,6 +106,10 @@
             '#chair' : {
                 "x" : -size_x/2,
                 "y" : -2
+            },
+            '#glass' : {
+                "x" : -5,
+                "y" : 2
             }
         }
 
@@ -142,9 +147,12 @@
             coords['#speaker2']['x'] = (x-1)*range_scale;
             coords['#tv']['x'] = (x-1)*range_scale/2;
             coords['#chair']['x'] = (x-1)*range_scale/2;
+            coords['#glass']['x'] = (x-1)*range_scale;
+
             pos_update('#speaker2');
             pos_update('#tv');
             pos_update('#chair');
+            pos_update('#glass');
         }
             
         function y_dim(x){
@@ -153,7 +161,9 @@
             document.querySelector("#z_wall").style.height = dim + "rem";
 
             coords['#chair']['y'] = (x-1)*range_scale/2;
+            coords['#glass']['y'] = (x-1)*range_scale;
             pos_update('#chair');
+            pos_update('#glass');
         }
         
         function z_dim(x){
